@@ -6,11 +6,15 @@ from email.mime.text import MIMEText
 import locale
 import datetime
 import re
+import os
 
 # Set Debug
-debug = True
+debug = False
 SendToOthers = False
 sendEmail = True
+
+# From https://stackoverflow.com/questions/4060221/how-to-reliably-open-a-file-in-the-same-directory-as-a-python-script
+__location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
 # Send mail Method
 def send_email(toEmail):
@@ -101,17 +105,17 @@ smtp.connect('smtp.gmail.com')
 if(debug):
    print "Logging in..."
 
-f = open('email_credentials.txt', 'r')
+f = open(os.path.join(__location__, 'email_credentials.txt'), 'r');
 username = f.readline().strip('\n\r')
 password = f.readline().strip('\n\r')
 f.close()
 if debug:
-    print username
-    print password
+    print "'" + username + "'"
+    print "'" + password + "'"
 
 smtp.login(username,password)
 
-f = open('emails.txt')
+f = open(os.path.join(__location__, 'emails.txt'), 'r');
 ## Send Emails
 for email in f:
     send_email(email)
@@ -126,3 +130,4 @@ smtp.close()
 
 if(debug):
     print "SMTP closed."
+
