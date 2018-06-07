@@ -64,7 +64,6 @@ if(debug):
 soup = BeautifulSoup(urlopen("http://www.memoryexpress.com/"), 'html.parser')
 dailyDealUrl = soup.find("div", {"class": "c-shhp-daily-deal"}).find("a")
 picTag = soup.body.find("div", {"class": "c-shhp-daily-deal__image"}).find("img")
-print str(dailyDealUrl)
 
 if(debug):
    print "Scraping Information... 5% "
