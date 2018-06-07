@@ -8,8 +8,9 @@ import datetime
 import re
 
 # Set Debug
-debug = False
+debug = True
 SendToOthers = False
+sendEmail = True
 
 # Send mail Method
 def send_email(toEmail):
@@ -34,8 +35,9 @@ def send_email(toEmail):
     html = "<html><head></head><body>"
     html += "<p>" + message_text + "</p>"
     html += "<a href=\"" + productURL + "\">" + productName  + "</a><br><br>"
+    html += '<div style="text-align: center;">'
     html += str(picTag)
-    html += "</body></html>"
+    html += "</div></body></html>"
 
     # Record MIME Types of both parts - text/plain and text/html.
     part1 = MIMEText(text, 'plain')
@@ -46,17 +48,19 @@ def send_email(toEmail):
     msg.attach(part2)
 
     # Send message
-    if(debug is False):
+    if(sendEmail):
         smtp.sendmail(from_addr,toEmail,msg.as_string())
     else:
         print msg
+
 
 # Scrape Information
 if(debug):
    print "Scraping Information... 0%"
 soup = BeautifulSoup(urlopen("http://www.memoryexpress.com/"), 'html.parser')
-dailyDealUrl = soup.body.find("div",id="HomePageRotatorItems").find("img", src=re.compile('24hrDailyDeal')).parent
-picTag = soup.body.find("div",id="HomePageRotatorItems").find("img", src=re.compile('24hrDailyDeal'))
+dailyDealUrl = soup.find("div", {"class": "c-shhp-daily-deal"}).find("a")
+picTag = soup.body.find("div", {"class": "c-shhp-daily-deal__image"}).find("img")
+print str(dailyDealUrl)
 
 if(debug):
    print "Scraping Information... 5% "
